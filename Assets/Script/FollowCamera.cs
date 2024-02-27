@@ -22,7 +22,7 @@ public class FollowCamera : MonoBehaviour
     void Update()
     {
         Vector3 destination = target.position + offset;
-        destination=Background.Instance.InBoundary(destination);
+        destination = Background.Instance.InBoundary(destination);
         transform.position = Vector3.Lerp(transform.position, destination, lerpAmount);
     }
 }

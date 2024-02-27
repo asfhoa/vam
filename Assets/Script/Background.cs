@@ -33,7 +33,8 @@ public class Background : MonoBehaviour
         //->ClosetPoint : Vector3
         //  =point위치를 경계 내부로 변환시켜 반환
         Vector3 point = tilemap.transform.position - center;
-        return tilemap.localBounds.ClosestPoint(position);
+        point.z = -10f;
+        return tilemap.localBounds.ClosestPoint(point);
     }
 
     public Vector3 InBoundary(Vector3 position,Vector2 camSize)
@@ -42,6 +43,7 @@ public class Background : MonoBehaviour
 
         //경계를 타일 맵 크기에서 카메라 사이즈를 뺀 나머지로 정한다
         Bounds boundary = new Bounds(center, size - camSize);
+        
         return boundary.ClosestPoint(position);
     }
 }
