@@ -559,13 +559,13 @@ TextureImporter:
       name: Front 0
       rect:
         serializedVersion: 2
-        x: 38
-        y: 27
-        width: 18
-        height: 18
+        x: 39
+        y: 28
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 2, y: 2, z: 2, w: 2}
+      border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -618,27 +618,6 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: UI_0
-      rect:
-        serializedVersion: 2
-        x: 125
-        y: 79
-        width: 3
-        height: 36
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5053e6e8edbb3e44088988d0ea385722
-      internalID: -367106727
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -673,7 +652,6 @@ TextureImporter:
       Title 0: 1315674547
       Title 1: -1799623379
       Title 2: -77559378
-      UI_0: -367106727
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
