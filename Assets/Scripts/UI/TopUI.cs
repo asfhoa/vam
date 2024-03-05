@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class TopUI : Singleton<TopUI>
 {
+    [SerializeField] DamageText damagePrefab;
     [SerializeField] Text levelText;
     [SerializeField] Text killCountText;
     [SerializeField] Image expFill;
@@ -23,5 +24,12 @@ public class TopUI : Singleton<TopUI>
     public void UpdateKillCount(int amount)
     {
         killCountText.text = amount.ToString("N0");
+    }
+
+
+    public void AppearDamage(Vector3 hitPoint, float amount)
+    {
+        DamageText newText = Instantiate(damagePrefab, transform);        
+        newText.Setup(hitPoint, Mathf.RoundToInt(amount));
     }
 }

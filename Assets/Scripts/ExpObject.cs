@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class ExpObject : MonoBehaviour
+public class ExpObject : RootBehaiour
 {
     public enum TYPE
     {
@@ -41,12 +41,16 @@ public class ExpObject : MonoBehaviour
         float gravity = DETEACT_POWER;
         while(true)
         {
-            Vector3 dir = (target.position - transform.position).normalized;        // 타겟을 향하는 단위 벡터.
-            transform.position += dir * gravity * Time.deltaTime;                   // 타겟 중심으로 현재 힘(gravity)만큼 이동.
-            if (Vector3.Distance(transform.position, target.position) <= 0.1f)      // 남은 거리가 0.1보다 적을 경우
-                break;
+            if (!isPauseObject)
+            {
+                Vector3 dir = (target.position - transform.position).normalized;        // 타겟을 향하는 단위 벡터.
+                transform.position += dir * gravity * Time.deltaTime;                   // 타겟 중심으로 현재 힘(gravity)만큼 이동.
+                if (Vector3.Distance(transform.position, target.position) <= 0.1f)      // 남은 거리가 0.1보다 적을 경우
+                    break;
 
-            gravity += GRAVITY * Time.deltaTime;                                    // 중력 가속도 더하기.
+                gravity += GRAVITY * Time.deltaTime;                                    // 중력 가속도 더하기.
+            }
+
             yield return null;
         }
 
