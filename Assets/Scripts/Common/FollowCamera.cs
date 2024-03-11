@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FollowCamera : MonoBehaviour
+public class FollowCamera : Singleton<FollowCamera>
 {
     [SerializeField] Camera cam;
     [SerializeField] Transform target;

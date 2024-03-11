@@ -30,7 +30,6 @@ public class Player : Unit
     {
         base.Start();
 
-        AddItem(ItemManager.Instance.GetItem("ITWE0003"));
         UpdateUI();
     }
     private void Update()
