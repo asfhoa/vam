@@ -17,6 +17,6 @@ public class AudioSe : MonoBehaviour
     private void Update()
     {
         if (!source.isPlaying)
-            Destroy(gameObject);
+            Destroy(gameObject);    //오디오의 재생이 끝나면 자동으로 오브젝트를 삭제
     }
 }

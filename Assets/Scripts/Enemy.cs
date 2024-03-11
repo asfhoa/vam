@@ -5,17 +5,17 @@ using UnityEngine;
 public class Enemy : Unit
 {
     [SerializeField] Ability grow;
-    [SerializeField] Transform damagePivot;       // 데미지가 출력되는 기준.
+    [SerializeField] Transform damagePivot;       //받은 데미지가 출력되는 위치.
 
     SpriteRenderer spriteRenderer;
-    Rigidbody2D rigid;
+    Rigidbody2D rigid;  //OnTrigger,OnCollision를 사용하기위해서는 rigidbody가 필수로 들어가야 한다
     Player target;
 
-    float delayTime;
+    float delayTime;    //공격 주기
 
-    protected new void Start()
+    public override void Setup()
     {
-        base.Start();
+        base.Setup();
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigid = GetComponent<Rigidbody2D>();
@@ -26,13 +26,13 @@ public class Enemy : Unit
     {
         Player player = collision.GetComponent<Player>();
         if (player != null)
-            target = player;
+            target = player;    //접촉한 물체가 플레이어라면 타겟에 저장
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         Player player = collision.GetComponent<Player>();
         if (player != null)
-            target = null;
+            target = null;      //플레이어가 범위에서 나가면 타겟을 초기화
     }
 
     void Update()
@@ -45,16 +45,7 @@ public class Enemy : Unit
             return;
 
         AttackToPlayer();
-
-        rigid.velocity = Vector2.MoveTowards(rigid.velocity, Vector2.zero, Time.deltaTime * 8f);
-        
-        Vector3 destination = Player.Instance.transform.position;
-        Vector3 dir = (destination - transform.position).normalized;
-        spriteRenderer.flipX = dir.x < 0;
-
-        // 넉백이 없을 때 (= 밀림이 없을 때)에만 움직일 수 있다.
-        if (rigid.velocity == Vector2.zero)
-            transform.position = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
+        Movement();
     }
 
     private void AttackToPlayer()
@@ -65,11 +56,24 @@ public class Enemy : Unit
             return;
         }
 
+        //타겟이 있을 경우
         if (target != null)
         {
-            target.TakeDamage(power);
+            target.TakeDamage(power);   //타겟에게 데미지를 준다
             delayTime = cooltime;
         }
+    }
+    protected virtual void Movement()
+    {
+        rigid.velocity = Vector2.MoveTowards(rigid.velocity, Vector2.zero, Time.deltaTime * 8f);
+
+        Vector3 destination = Player.Instance.transform.position;       //플레이어의 위치를 저장
+        Vector3 dir = (destination - transform.position).normalized;    //자신의 위치와 플레이어의 위치로 방향을 구한다
+        spriteRenderer.flipX = dir.x < 0;                               //움직을 방향에 따라서 스프라이트를 뒤집을지 정해진다
+
+        // 넉백이 없을 때 (= 밀림이 없을 때)에만 움직일 수 있다.
+        if (rigid.velocity == Vector2.zero)
+            transform.position = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
     }
 
     protected override void OnPauseGame(bool isPause)
@@ -89,10 +93,16 @@ public class Enemy : Unit
         base.TakeDamage(power, knockback);
         TopUI.Instance.AppearDamage(damagePivot.position, power);
     }
+    public virtual void DeadForce()
+    {
+        hp = 0;
+        Dead();
+    }
 
     protected override void Hit(float knockback)
     {
-        anim.SetTrigger("onHit");
+        if(anim != null)
+            anim.SetTrigger("onHit");
 
         // 뒤로 밀기.
         if(knockback > 0f)

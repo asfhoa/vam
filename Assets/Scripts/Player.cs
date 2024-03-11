@@ -10,12 +10,12 @@ public class Player : Unit
 
     [SerializeField] float magnetRange;
     [SerializeField] Transform hpPivot;
-    [SerializeField] HpBar hpBar;
 
     List<Item> inventory;                   // 소지 아이템의 정보.
     List<WeaponObject> weaponList;          // 무기 오브젝트.
     SpriteRenderer spriteRenderer;          // 스프라이트 컨포넌트.
     LayerMask expMask;                      // 경험치 마스크.
+    HpBar hpBar;
 
     private void Awake()
     {
@@ -26,10 +26,11 @@ public class Player : Unit
         spriteRenderer = GetComponent<SpriteRenderer>();
         expMask = 1 << LayerMask.NameToLayer("Exp");
     }
-    protected new void Start()
+    public override void Setup()
     {
-        base.Start();
+        base.Setup();
 
+        hpBar = HpBar.Instance;
         UpdateUI();
     }
     private void Update()
@@ -47,6 +48,7 @@ public class Player : Unit
        
     }
 
+    //캐릭터의 움직임
     public void OnMovement(Vector2 input)
     {
         if (!isAlive || isPauseObject)
@@ -76,8 +78,8 @@ public class Player : Unit
     }
     protected override void LevelUp()
     {
-        AudioManager.Instance.PlaySe("levelup");
-        GameManager.Instance.SwitchPause(true);
+        AudioManager.Instance.PlaySe("levelup");    //levelup 오디오를 실행
+        GameManager.Instance.SwitchPause(true);     //게임을 일시정지
         Item[] randomItems = ItemManager.Instance.GetRandomItem();
         DrawUI.Instance.ShowDrawUI(randomItems, (select) =>
         {
@@ -85,7 +87,7 @@ public class Player : Unit
             GameManager.Instance.SwitchPause(false);
         });
     }
-    private void AddItem(Item selectItem)
+    public void AddItem(Item selectItem)
     {
         // 선택한 아이템의 레벨을 1 증가시킨다.
         selectItem.level += 1;
@@ -108,6 +110,7 @@ public class Player : Unit
         UpdateAbility();
     }
 
+    //능력치 데이터를 업데이트
     protected override void UpdateAbility()
     {
         base.UpdateAbility();
@@ -126,6 +129,7 @@ public class Player : Unit
         return increase;
     }
 
+    //죽음 처리
     protected override void Dead()
     {
         anim.SetTrigger("onDead");
@@ -135,6 +139,7 @@ public class Player : Unit
         GameManager.Instance.OnDeadPlayer();
     }
 
+    //UI업데이트
     private void UpdateUI()
     {
         // 현재 exp의 기준이 누적치이기 때문에 레벨 구간에 따른 비율을 계산.
@@ -145,6 +150,7 @@ public class Player : Unit
         TopUI.Instance.UpdateKillCount(killCount);
     }
 
+    //에디터에서 플레이어의 자석 범위표시
     private void OnDrawGizmos()
     {
         UnityEditor.Handles.color = Color.green;
